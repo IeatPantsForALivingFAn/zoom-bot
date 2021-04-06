@@ -30,21 +30,21 @@ def the_bot(meeting_id, password):
         print("Could not enter password!")
         exit()
 
-    # click audio prompt
-    audio = None
-    counter = 0 # count our wait
-    while(audio == None):
-        # wait until audio prompt shows up
-        time.sleep(1)
-        if(counter > 5):
-            print("Could not enter meeting!") # waited too long/meeting not yet started
-            exit()
-        audio = pyautogui.locateOnScreen(
-            str(Path("images/join-with-computer-audio.png")),
-            confidence = 0.8
-        )
-        counter += 1
-    pyautogui.click(pyautogui.center(audio)) # click the audio button
+    # # click audio prompt
+    # audio = None
+    # counter = 0 # count our wait
+    # while(audio == None):
+    #     # wait until audio prompt shows up
+    #     time.sleep(1)
+    #     if(counter > 10):
+    #         print("Could not enter meeting!") # waited too long/meeting not yet started
+    #         exit()
+    #     audio = pyautogui.locateOnScreen(
+    #         str(Path("images/join-with-computer-audio.png")),
+    #         confidence = 0.8
+    #     )
+    #     counter += 1
+    # pyautogui.click(pyautogui.center(audio)) # click the audio button
 
     # enter the chat
     chat = None
@@ -52,7 +52,7 @@ def the_bot(meeting_id, password):
     while(not chat):
         time.sleep(3)
         # move the mouse to show chat 
-        pyautogui.moveTo(int(50*pos),int(500/pos))
+        pyautogui.moveTo(int(200*pos),int(500/pos))
         chat = pyautogui.locateOnScreen(str(Path("images/chat.png")),confidence = 0.9)
         pos += 1
     pyautogui.click(pyautogui.center(chat))
@@ -60,7 +60,7 @@ def the_bot(meeting_id, password):
     time.sleep(1)
     # type the roll no
     pyautogui.click(1121,722)
-    pyautogui.write("181P059|Rohit Nair|49")
+    pyautogui.write("Your Message")
     pyautogui.press("enter")
 
     # leave the meeting
@@ -77,44 +77,42 @@ def the_bot(meeting_id, password):
     pyautogui.click(pyautogui.center(leave))
 
 if __name__ == "__main__":
-    flag = 'Y'
-    while(flag == "Y"):
-        # check if zoom is open or not
-        if "zoom" in (p.name() for p in psutil.process_iter()):
-            print("Zoom already open")
-            exit()
-        else:
-            lines = list() # storing lines
-            with open("meeting.txt","r") as file:
-                # open meetings file and read all the lines
-                for line in file:
-                    lines.append(line)
+    # check if zoom is open or not
+    if "zoom" in (p.name() for p in psutil.process_iter()):
+        print("Zoom already open")
+        exit()
+    else:
+        lines = list() # storing lines
+        with open("meeting.txt","r") as file:
+            # open meetings file and read all the lines
+            for line in file:
+                lines.append(line)
 
-            temp = list() 
-            meeting_details = list() # all meeting details with format
-            for line in lines:
-                temp = line.split(' ') 
-                meeting_details.append((temp[0],temp[1],temp[2])) # store the meeting details
+        temp = list() 
+        meeting_details = list() # all meeting details with format
+        for line in lines:
+            temp = line.split(' ') 
+            meeting_details.append((temp[0],temp[1],temp[2])) # store the meeting details
             
-            print("Select the meeting")
-            for meeting in zip(range(0,len(meeting_details)),meeting_details):
-                print(meeting) # print the selected meet
+        print("Select the meeting")
+        for meeting in zip(range(0,len(meeting_details)),meeting_details):
+            print(meeting) # print the selected meet
             
-            while(True): # select meeting 
-                try:
-                    meeting_no = int(input("Enter meeting no.:"))
-                    print("Selected meeting",meeting_details[meeting_no])
-                except IndexError: # invalid meeting no. entered
-                    print("Enter valid meeting no.")
-                    continue
-                else: # break if correct meeting no. entered
-                    break
+        while(True): # select meeting 
+            try:
+                meeting_no = int(input("Enter meeting no.:"))
+                print("Selected meeting",meeting_details[meeting_no])
+            except IndexError: # invalid meeting no. entered
+                print("Enter valid meeting no.")
+                continue
+            else: # break if correct meeting no. entered
+                break
             
-            # open zoom
-            zoom = subprocess.Popen("zoom",shell = False)
-            # wait for zoom to open
-            time.sleep(3) 
-            # execute the bot function
-            the_bot(meeting_details[meeting_no][0],meeting_details[meeting_no][1]) 
-            flag = input("Mark attendance? Y/n:")
+        # open zoom
+        zoom = subprocess.Popen("zoom",shell = False)
+        # wait for zoom to open
+        time.sleep(3) 
+        # execute the bot function
+        the_bot(meeting_details[meeting_no][0],meeting_details[meeting_no][1]) 
+
         
