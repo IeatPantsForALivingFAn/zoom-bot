@@ -7,7 +7,7 @@ in the 63rd line from "Your Message" to whatever you want sent.
 Instructions:-
 1. install all required packages by running 
 
-    pip install requirements.txt
+    pip install -r requirements.txt
 
 2. Set the meeting.txt, create a plain text file with 
    all meeting IDs and password in this format
