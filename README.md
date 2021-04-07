@@ -21,3 +21,6 @@ Instructions:-
     python main.py
 
 
+The meeting ID part had to be hardcoded since it was too light, to be detected effectively by 
+locateOnScreen. Go through the code and images directory and change whatever is different for your system
+
